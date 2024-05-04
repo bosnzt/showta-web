@@ -28,7 +28,7 @@
           </li>
         </ul>
       </div>
-      <div v-if="fileType>0 && fileType<6">
+      <div v-if="fileType>0 && fileType<9">
         <el-card class="box-card" :body-style="{padding:'0.75rem 0'}">
           <div class="optbtn">
             <OptionBtn :fileinfo="fileinfo" />
@@ -47,11 +47,24 @@
           </div>
           <!-- processing text -->
           <div v-else-if="fileType==4">
-            <text-editor v-if='isMonacoType(fileinfo)' :text="viewtxt" :fileinfo="fileinfo" />
-            <v-md-preview v-else :text="viewtxt"></v-md-preview>
+            <v-md-preview v-if='isMarkdownFile(fileinfo)' :text="viewtxt"></v-md-preview>
+            <PdfView v-else-if='isPdfFile(fileinfo)' :fileinfo="fileinfo" />
+            <text-editor v-else :fileinfo="fileinfo" />
+          </div>
+          <!-- local docx -->
+          <div v-else-if="fileType==5">
+            <DocView :fileinfo="fileinfo" />
+          </div>
+          <!-- local xlsx -->
+          <div v-else-if="fileType==6">
+            <XlsxView :fileinfo="fileinfo" />
+          </div>
+          <!-- ms office preview -->
+          <div v-else-if="fileType==7">
+            <MSOffice :fileinfo="fileinfo" />
           </div>
           <!-- other file -->
-          <div v-else-if="fileType==5" class="otherfile">
+          <div v-else-if="fileType==8" class="otherfile">
             <svg-icon :icon="fileIcon(otherFile)"/>
             <div class="otherfile_info">
               <b>{{otherFile.name}}</b>
@@ -137,9 +150,13 @@ import AudioPlayer from "./components/AudioPlayer.vue"
 import TextEditor from "./components/TextEditor.vue"
 import OptionBtn from "./components/OptionBtn.vue"
 import Notice from "./components/Notice.vue"
+import PdfView from "./components/PdfView.vue"
+import DocView from "./components/DocView.vue"
+import XlsxView from "./components/XlsxView.vue"
+import MSOffice from "./components/MSOffice.vue"
 import SearchDlg from "./components/SearchDlg.vue"
 import {dateFormat} from '@/utils/date'
-import {isMdUrl, formatFileSize, fileIcon, isMonacoType} from '@/utils/format'
+import {isMdUrl, formatFileSize, fileIcon, isMarkdownFile, isPdfFile, isDocFile, isXlsxFile} from '@/utils/format'
 import {compareModified} from '@/utils/sort'
 import axios from 'axios'
 import {useAppStore} from '@/store/modules/app'
@@ -254,9 +271,11 @@ const setPreview = async (finfo) => {
     album.value.name = finfo.name
   } else if (finfo.ptype == 3) {
     viewimg.value = finfo.raw_url
-  } else if (finfo.ptype == 4) {
-    const response = await axios.get(finfo.raw_url)
-    viewtxt.value = response.data
+  } else if (finfo.ptype >= 4 && finfo.ptype < 8) {
+    if (isMarkdownFile(finfo)) {
+      const response = await axios.get(finfo.raw_url)
+      viewtxt.value = response.data
+    }
   } else {
     otherFile.value = finfo
   }

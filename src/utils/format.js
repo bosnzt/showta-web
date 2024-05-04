@@ -20,9 +20,9 @@ export const formatFileSize = (row) => {
   }  
 }
 
-const videoTypes = ["avi", "flv", "mkv", "mov", "mp4", "rmvb", "webm"]
-const pictureTypes = ["bmp", "gif", "ico", "jpeg", "jpg", "png", "svg", "swf", "tiff", "webp"]
-const textTypes = ["ass", "bat", "c", "conf", "cpp", "go", "h", "hpp", "htm", "html", "ini", "java", "js", "log", "lrc", "md", "php", "py", "rs", "sh", "sql", "srt", "tsx", "txt", "vtt", "vue", "xml", "yaml", "yml"]
+const videoTypes = ["avi", "flv", "m3u8", "mkv", "mov", "mp4", "swf", "rmvb", "webm"]
+const pictureTypes = ["bmp", "gif", "ico", "jpeg", "jpg", "png", "svg", "tiff", "webp"]
+const textTypes = ["ass", "bat", "c", "conf", "cpp", "go", "h", "hpp", "htm", "html", "ini", "java", "js", "log", "lrc", "md", "pdf", "php", "py", "rs", "sh", "sql", "srt", "tsx", "txt", "vtt", "vue", "xml", "yaml", "yml"]
 const audioTypes = ["flac", "m4a", "mp3", "ogg", "opus", "wav", "wma"]
 const compressTypes = ["7z", "bz2", "gz", "rar", "tar", "zip"]
 const excelTypes = ["csv", "xlam", "xls", "xlsb", "xlsm", "xlsx", "xlt", "xltm", "xltx"]
@@ -63,12 +63,18 @@ export const fileIcon = (row) => {
   return 'file-other'
 }
 
-export const isMonacoType = (fileinfo) => {
-  const filename = fileinfo.name.toLowerCase()
-  if (filename.endsWith('.md')) {
-    return false
-  }
-
-  return true
+export const isMarkdownFile = (fileinfo) => {
+  return fileinfo.name.toLowerCase().endsWith('.md')
 }
 
+export const isPdfFile = (fileinfo) => {
+  return fileinfo.name.toLowerCase().endsWith('.pdf')
+}
+
+export const isDocFile = (fileinfo) => {
+  return fileinfo.name.toLowerCase().endsWith('.docx')
+}
+
+export const isXlsxFile = (fileinfo) => {
+  return fileinfo.name.toLowerCase().endsWith('.xlsx')
+}

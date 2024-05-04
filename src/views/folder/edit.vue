@@ -14,6 +14,7 @@
       </el-form-item>
       <el-form-item :label="$t('table.accessPwd')">
         <el-input v-model="form.password" />
+        <el-switch v-model="form.apply_sub" /><span class="apply-sub">{{$t('table.tipApplySub')}}</span>
       </el-form-item>
       <el-form-item :label="$t('folder.lbTopAnnouncement')">
         <el-input
@@ -58,6 +59,7 @@ const form = ref({
   folder: '',
   write:false,
   password: '',
+  apply_sub: false,
   topmd: '',
   readme: '',
 })
@@ -113,5 +115,9 @@ const selectPath = (path) => {
   color: $formTipColor;
   line-height: 1.5rem;
   font-size: 0.8rem;
+}
+
+.apply-sub {
+  margin-left: 5px;
 }
 </style>

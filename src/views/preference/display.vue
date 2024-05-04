@@ -60,6 +60,13 @@
         </el-checkbox>
       </el-checkbox-group>
     </el-form-item>
+    <el-form-item :label="$t('display.lbOffice')">
+      <el-radio-group v-model="form.office">
+        <el-radio label="local" size="large">{{$t('display.officeOptLocal')}}</el-radio>
+        <el-radio label="ms" size="large">{{$t('display.officeOptMS')}}</el-radio>
+      </el-radio-group>
+      <div class="tip">{{$t('display.tipOffice')}}</div>
+    </el-form-item>
 
     <el-form-item>
       <el-button type="primary" size='large' @click="onSubmit">{{$t('btn.save')}}</el-button>
@@ -79,6 +86,7 @@ const form = ref({
   picture: [],
   text:[],
   audio:[],
+  office:'0',
 })
 const videos = ref([])
 const pictures = ref([])
@@ -158,6 +166,8 @@ onBeforeMount(async()=> {
     } else if (element.key === 'preview_audio') {
       form.value.audio = element.value.split(",")
       handleCheckedAudioChange(form.value.audio)
+    } else if (element.key === 'preview_office') {
+      form.value.office = element.value
     }
   }
 })
@@ -178,6 +188,13 @@ const onSubmit = async () => {
 }
 .option {
   width: 2.75rem;
+}
+
+.tip {
+  width: 100%;
+  color: $formTipColor;
+  line-height: 1.5rem;
+  font-size: 0.8rem;
 }
 
 </style>

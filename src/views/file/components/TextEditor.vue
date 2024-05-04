@@ -4,6 +4,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import axios from 'axios'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import 'monaco-editor/esm/vs/basic-languages/monaco.contribution'
 
@@ -11,10 +12,6 @@ const editorRef = ref()
 let monacoElem
 
 const props = defineProps({
-  text: {
-    type: String,
-    required: true,
-  },
   fileinfo: {
     type: Object,
     required: true,
@@ -25,14 +22,15 @@ const isSideScreen = computed(() => {
   return window.innerWidth > 600
 })
 
-onMounted(() => {
+onMounted(async () => {
+  const response = await axios.get(props.fileinfo.raw_url)
+
   let model = monaco.editor.createModel(
-    props.text,
+    response.data,
     undefined,
     monaco.Uri.parse(props.fileinfo.name)
   )
   monacoElem = monaco.editor.create(editorRef.value, {
-    // value: props.text,
     model: model,
     wordWrap: true,
     automaticLayout: true,
